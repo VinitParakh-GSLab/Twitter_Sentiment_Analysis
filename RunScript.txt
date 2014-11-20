@@ -1,0 +1,13 @@
+// From terminal
+1)compile:
+javac -cp ./src;lib/ejml-0.23.jar;lib/opencsv-2.4.jar;lib/stanford-corenlp-3.4.1lib/stanford-corenlp-3.4.1-models.jar src/StanfordCoreNlpDemo.java 
+
+2) Run:
+java -cp ./; StanfordCoreNlpDemo "F://study//sem3//CS599//Project//Data_csv//input//tweets9.csv" "F://study//sem3//CS599//Project//Data_csv//output//output9.csv"
+
+
+// With jar
+
+make jar: export jar in eclipse
+run as: 
+java -jar project.jar F://study//sem3//CS599//Project//Data_csv//input//tweets1.csv F://study//sem3//CS599//Project//Data_csv//output//output1.csv
