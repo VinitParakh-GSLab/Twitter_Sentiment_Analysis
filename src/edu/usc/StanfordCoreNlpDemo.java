@@ -26,10 +26,17 @@ public class StanfordCoreNlpDemo {
   Properties props;
   
   public static void main(String[] args) throws IOException {
+	  
+	  //emoticon-parser
+	  EmoticonJsonParser.readJson();
+	  
+	  //slag-parser
+	  SlangParser.readSlangFile();
+	  
 	  StanfordCoreNlpDemo obj = new StanfordCoreNlpDemo();
 	  String input = args[0];
 	  String output = args[1];
-	  obj.readCSV(input, output);	  
+	  obj.readCSV(input, output);	 
 }
   
   //Get Sentiment from Stanford Core NLP
@@ -93,6 +100,7 @@ public class StanfordCoreNlpDemo {
 	            	  
 	            	  writer.writeNext(sentimentArray);
 	        	  }
+	        	  
 	        	  values = reader.readNext();
 	          }
           } finally {
@@ -150,8 +158,26 @@ public class StanfordCoreNlpDemo {
 				replacedString = replacedString.replace(smileyMatcher.group(), EmoticonJsonParser.map.get(smileyMatcher.group()));
 		}
 		
-	  replacedString = replacedString.replaceAll("^rt ", "");
-	 
-	  return replacedString;
+		//remove slang-words
+		String[] splittedString = replacedString.split("\\s+");
+		for(int i=0; i<splittedString.length; i++)
+		{
+			if(SlangParser.slangMap.containsKey(splittedString[i]))
+			{
+				String regex = ("\\b"+splittedString[i]+"\\b"); 
+				replacedString = replacedString.replaceAll(regex, SlangParser.slangMap.get(splittedString[i]));
+			}
+		}
+		
+		//replace RT
+		replacedString = replacedString.replaceAll("^rt ", "");
+		
+		//punctuation replace!!
+		replacedString = Pattern.compile("(?![!])\\p{Punct}").matcher(replacedString).replaceAll("");
+		
+		System.out.println(input);
+		System.out.println(replacedString);
+		
+		return replacedString;
   }
 }

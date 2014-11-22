@@ -9,13 +9,10 @@ import java.util.HashMap;
 
 public class SlangParser {
 	static HashMap<String, String> slangMap = new HashMap<String, String>();
-	public static void main(String []args){
-		String input = "./preprocessing/SlangsLookUp.txt";
-		SlangParser.readSlangFile(input);
-	}
-
-	public static void readSlangFile(String input){
+		
+	public static void readSlangFile(){
 		BufferedReader bfReader;
+		String input = "./preprocessing/SlangsLookUp.txt";
 		
 		String [] values;
 		try {
@@ -25,6 +22,7 @@ public class SlangParser {
 				values = line.split("\t");
 				slangMap.put(values[0],values[1]);
 			}
+			
 			//printMap(slangMap);
 		} catch (FileNotFoundException e1) {
 			// TODO Auto-generated catch block
