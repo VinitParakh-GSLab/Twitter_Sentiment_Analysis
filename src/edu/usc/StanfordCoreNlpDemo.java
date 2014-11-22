@@ -12,9 +12,12 @@ import java.util.List;
 import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import au.com.bytecode.opencsv.CSVReader;
 import au.com.bytecode.opencsv.CSVWriter;
+
 import com.twitter.Extractor;
+
 import edu.stanford.nlp.ling.CoreAnnotations.SentencesAnnotation;
 import edu.stanford.nlp.pipeline.Annotation;
 import edu.stanford.nlp.pipeline.StanfordCoreNLP;
@@ -37,9 +40,12 @@ public class StanfordCoreNlpDemo {
 	  SlangParser.readSlangFile();
 	  
 	  StanfordCoreNlpDemo obj = new StanfordCoreNlpDemo();
-	  String input = args[0];
-	  String output = args[1];
-	  obj.readCSV(input, output);
+	  String input = "";
+	  String output = "";
+	  //String input = args[0];
+	  //String output = args[1];
+	  obj.readCSV("F://study//sem3//CS599//Project//Data_csv//input//tweets9.csv", 
+			  "F://study//sem3//CS599//Project//Data_csv//output//output1.csv");
 }
   
   //Get Sentiment from Stanford Core NLP
