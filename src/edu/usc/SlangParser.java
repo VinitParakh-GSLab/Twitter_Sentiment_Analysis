@@ -4,19 +4,22 @@ import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
+import edu.resource.Resource;
 
 public class SlangParser {
 	static HashMap<String, String> slangMap = new HashMap<String, String>();
 		
 	public static void readSlangFile(){
 		BufferedReader bfReader;
-		String input = "./preprocessing/SlangsLookUp.txt";
+		//String input = "./preprocessing/SlangsLookUp.txt";
 		
 		String [] values;
 		try {
-			bfReader = new BufferedReader( new InputStreamReader(new FileInputStream(input)));	
+			InputStream stream = Resource.class.getResourceAsStream("SlangsLookUp.txt");
+			bfReader = new BufferedReader( new InputStreamReader(stream));	
 			String line = "";
 			while ((line = bfReader.readLine()) != null) {
 				values = line.split("\t");

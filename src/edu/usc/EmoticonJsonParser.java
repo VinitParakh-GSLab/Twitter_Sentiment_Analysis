@@ -1,16 +1,19 @@
 package edu.usc;
 
 import java.io.BufferedReader;
-
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import edu.resource.Resource;
 
 public class EmoticonJsonParser {
 
@@ -22,10 +25,13 @@ public class EmoticonJsonParser {
 		JSONObject jsonObj = null;
 		BufferedReader reader;
 		try {
-			reader = new BufferedReader(new InputStreamReader(new FileInputStream(jsonFile), "UTF8"));
+			
+			InputStream stream = Resource.class.getResourceAsStream("kimonoFinal.json");
+			BufferedReader bfReader = new BufferedReader( new InputStreamReader(stream));	
+			//reader = new BufferedReader(new InputStreamReader(new FileInputStream(jsonFile), "UTF8"));
 			String line = null;
 			StringBuffer buffer = new StringBuffer();
-			while ((line = reader.readLine()) != null) {
+			while ((line = bfReader.readLine()) != null) {
 				buffer.append(line);
 			}
 			String jsonString = buffer.toString();
