@@ -12,16 +12,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class EmoticonJsonParser {
-	
-	public static void main(String [] args)
-	{
-		EmoticonJsonParser emoticonJsonParser = new EmoticonJsonParser();
-		emoticonJsonParser.readJson();
-		//System.out.println(jsonObj);
-	}
-	private HashMap<String, String> map = new HashMap<String, String>();
 
-	public void readJson() {
+	public static HashMap<String, String> map = new HashMap<String, String>();
+
+	public static void readJson() {
 		String jsonFile = "./preprocessing/kimonoFinal.json";
 		JSONObject jsonObj = null;
 		BufferedReader reader;
@@ -45,7 +39,7 @@ public class EmoticonJsonParser {
 		//return jsonObj;
 	}
 
-	private void parseJson(JSONObject jsonObj) {
+	private static void parseJson(JSONObject jsonObj) {
 		// TODO Auto-generated method stub
 		try {			
 			JSONObject resultsObj = jsonObj.getJSONObject("results");
@@ -77,7 +71,7 @@ public class EmoticonJsonParser {
 		}
 	}
 
-	private void printMap(HashMap<String, String> map) {
+	private static void printMap(HashMap<String, String> map) {
 		java.util.Iterator<String> iterator = map.keySet().iterator();  
 		int count = 0;   
 		while (iterator.hasNext()) {  
