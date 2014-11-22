@@ -24,6 +24,9 @@ import edu.stanford.nlp.util.CoreMap;
 public class StanfordCoreNlpDemo {
 
   Properties props;
+  int countSlang = 0;
+  int countSmiley = 0;
+  int countTotal = 0;
   
   public static void main(String[] args) throws IOException {
 	  
@@ -36,7 +39,7 @@ public class StanfordCoreNlpDemo {
 	  StanfordCoreNlpDemo obj = new StanfordCoreNlpDemo();
 	  String input = args[0];
 	  String output = args[1];
-	  obj.readCSV(input, output);	 
+	  obj.readCSV(input, output);
 }
   
   //Get Sentiment from Stanford Core NLP
@@ -77,11 +80,10 @@ public class StanfordCoreNlpDemo {
 		  
           try {
 	          String[] values = reader.readNext();
-	          int count = 1;
 	          
 	          while (values != null ) {
-	        	  System.out.println(count);
-	        	  count++;
+	        	  countTotal++;
+	        	  System.out.println(countTotal);
 	        	  
 	        	  ArrayList<String> valuesList = new ArrayList<String>(Arrays.asList(values));
 	        	  
@@ -89,9 +91,8 @@ public class StanfordCoreNlpDemo {
 	        	  String replacedString = dataPreProcessing(values[1], extractor);
 	        	  replacedString = replacedString.trim();
 	        	  
-	        	  if(replacedString.length() > 0 && replacedString != null)
+	        	 if(replacedString.length() > 0 && replacedString != null)
 	        	  {
-	        		  System.out.println(replacedString);
 	            	  String sentiment = getSentiment(replacedString);
 	            	  valuesList.add(sentiment);
 	            	  
@@ -112,6 +113,10 @@ public class StanfordCoreNlpDemo {
           // we have to process exceptions when it is not required
           e.printStackTrace();
 	  }	
+	  
+	  System.out.println("Slang Tweets: " + countSlang);
+	  System.out.println("Smiley Tweets: " + countSmiley);
+	  System.out.println("Total Tweets: " + countTotal);
 	  System.out.println("Done");
   }
   
@@ -146,14 +151,21 @@ public class StanfordCoreNlpDemo {
 	  	replacedString = replacedString.replaceAll("#", "");
 	  	
 	  	//remove smileys
-	  	String smileyHat = "[<>]?";
+	  	/*String smileyHat = "[<>]?";
 		String smileyEyes = "[:;=8]";
 		String smileyNose = "[\\-o\\*\\']?";
-		String smileyMouth = "[\\)\\]\\(\\[dDpP/\\:\\}\\{@\\|\\\\]";
+		String smileyMouth = "[\\)\\]\\(\\[dDpP/\\:\\}\\{@\\|\\\\]";*/
 		
-		Matcher smileyMatcher = Pattern.compile(smileyHat+smileyEyes+smileyNose+smileyMouth).matcher(replacedString);
+		Matcher smileyMatcher = EmoticonJsonParser.patternEmo.matcher(replacedString);
+		int flag = 0;
 		while(smileyMatcher.find())
 		{
+			//To avoid if a sentence contains multiple smileys
+			if(flag == 0)
+			{
+				flag = 1;
+				countSmiley++;
+			}
 			if(EmoticonJsonParser.map.containsKey(smileyMatcher.group()))
 				replacedString = replacedString.replace(smileyMatcher.group(), EmoticonJsonParser.map.get(smileyMatcher.group()));
 		}
@@ -166,6 +178,7 @@ public class StanfordCoreNlpDemo {
 			{
 				String regex = ("\\b"+splittedString[i]+"\\b"); 
 				replacedString = replacedString.replaceAll(regex, SlangParser.slangMap.get(splittedString[i]));
+				countSlang++;
 			}
 		}
 		
@@ -174,9 +187,6 @@ public class StanfordCoreNlpDemo {
 		
 		//punctuation replace!!
 		replacedString = Pattern.compile("(?![!])\\p{Punct}").matcher(replacedString).replaceAll("");
-		
-		System.out.println(input);
-		System.out.println(replacedString);
 		
 		return replacedString;
   }
