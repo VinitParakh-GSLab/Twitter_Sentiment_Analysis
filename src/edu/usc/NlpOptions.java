@@ -1,8 +1,8 @@
 package edu.usc;
 
-import edu.stanford.nlp.pipeline.StanfordCoreNLP;
-
 import java.util.Properties;
+
+import edu.stanford.nlp.pipeline.StanfordCoreNLP;
 
 /**
  * User: jconwell

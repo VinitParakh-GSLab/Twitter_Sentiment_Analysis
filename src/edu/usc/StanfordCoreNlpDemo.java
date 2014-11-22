@@ -1,17 +1,25 @@
 package edu.usc;
 
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import edu.stanford.nlp.ling.CoreAnnotations.SentencesAnnotation;
-import edu.stanford.nlp.pipeline.*;
-import edu.stanford.nlp.sentiment.*;
-import edu.stanford.nlp.util.*;
-import au.com.bytecode.opencsv.CSVWriter;
 import au.com.bytecode.opencsv.CSVReader;
-import com.twitter.*;
+import au.com.bytecode.opencsv.CSVWriter;
+import com.twitter.Extractor;
+import edu.stanford.nlp.ling.CoreAnnotations.SentencesAnnotation;
+import edu.stanford.nlp.pipeline.Annotation;
+import edu.stanford.nlp.pipeline.StanfordCoreNLP;
+import edu.stanford.nlp.sentiment.SentimentCoreAnnotations;
+import edu.stanford.nlp.util.CoreMap;
 
 public class StanfordCoreNlpDemo {
 
@@ -19,12 +27,10 @@ public class StanfordCoreNlpDemo {
   
   public static void main(String[] args) throws IOException {
 	  StanfordCoreNlpDemo obj = new StanfordCoreNlpDemo();
-	  //String input = args[0];
-	  //String output = args[1];
-	  //obj.readCSV(input, output);
-	  
-	  obj.readCSV("/media/Android/data/tweets1.csv", "/media/Android/output1.csv");
-  }
+	  String input = args[0];
+	  String output = args[1];
+	  obj.readCSV(input, output);	  
+}
   
   //Get Sentiment from Stanford Core NLP
   public String getSentiment(String text)
