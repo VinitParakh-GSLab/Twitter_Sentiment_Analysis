@@ -40,12 +40,9 @@ public class StanfordCoreNlpDemo {
 	  SlangParser.readSlangFile();
 	  
 	  StanfordCoreNlpDemo obj = new StanfordCoreNlpDemo();
-	  String input = "";
-	  String output = "";
-	  //String input = args[0];
-	  //String output = args[1];
-	  obj.readCSV("F://study//sem3//CS599//Project//Data_csv//input//tweets9.csv", 
-			  "F://study//sem3//CS599//Project//Data_csv//output//output1.csv");
+	  String input = args[0];
+	  String output = args[1];
+	  obj.readCSV(input, output);
 }
   
   //Get Sentiment from Stanford Core NLP
@@ -62,9 +59,21 @@ public class StanfordCoreNlpDemo {
 	  for (CoreMap sentence : sentences) {
 	    sentiment = sentence.get(SentimentCoreAnnotations.ClassName.class);
 	  }
+	  
 	  return sentiment;
   }
   
+  public String checkSentiment(String sentiment)
+  {
+	  sentiment = sentiment.trim().toLowerCase();
+	  
+	  if(sentiment.equals("neutral"))
+		  return sentiment;
+	  else if(sentiment.equals("positive")|| sentiment.equals("verypositive"))
+		  return "happy";
+	  else
+		  return "sad";
+  }
   //Read the CSV file input
   public void readCSV(String input, String output)
   {
@@ -99,13 +108,15 @@ public class StanfordCoreNlpDemo {
 	        	  
 	        	 if(replacedString.length() > 0 && replacedString != null)
 	        	  {
+	        		  System.out.println(replacedString);
 	            	  String sentiment = getSentiment(replacedString);
 	            	  valuesList.add(sentiment);
-	            	  
-	            	  String[] sentimentArray = new String[ valuesList.size() ];
-	            	  sentimentArray = valuesList.toArray(sentimentArray);
-	            	  
-	            	  writer.writeNext(sentimentArray);
+	            	  valuesList.add(checkSentiment(sentiment));
+                	  
+                	  String[] sentimentArray = new String[ valuesList.size() ];
+                	  sentimentArray = valuesList.toArray(sentimentArray);
+                	  
+                	  writer.writeNext(sentimentArray);
 	        	  }
 	        	  
 	        	  values = reader.readNext();
