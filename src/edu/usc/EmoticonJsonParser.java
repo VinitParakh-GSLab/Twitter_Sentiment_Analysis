@@ -7,9 +7,6 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import javax.swing.text.html.HTMLDocument.Iterator;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,11 +22,11 @@ public class EmoticonJsonParser {
 	private HashMap<String, String> map = new HashMap<String, String>();
 
 	public void readJson() {
-		String jsonFile = "./kimonoFinal.json";
+		String jsonFile = "./preprocessing/kimonoFinal.json";
 		JSONObject jsonObj = null;
 		BufferedReader reader;
 		try {
-			reader = new BufferedReader( new InputStreamReader(new FileInputStream(jsonFile), "UTF8"));
+			reader = new BufferedReader(new InputStreamReader(new FileInputStream(jsonFile), "UTF8"));
 			String line = null;
 			StringBuffer buffer = new StringBuffer();
 			while ((line = reader.readLine()) != null) {
