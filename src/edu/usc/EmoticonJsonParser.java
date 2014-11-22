@@ -50,8 +50,7 @@ public class EmoticonJsonParser {
 
 	private void parseJson(JSONObject jsonObj) {
 		// TODO Auto-generated method stub
-		try {
-			
+		try {			
 			JSONObject resultsObj = jsonObj.getJSONObject("results");
 			JSONArray collection1 = resultsObj.getJSONArray("collection1");
 			for(int i=0; i< collection1.length();i++){
