@@ -69,20 +69,18 @@ public class EmoticonJsonParser {
 			    Matcher matcher = pattern.matcher(text);
 			    String processedText = matcher.replaceAll(replaceStr);
 				String[] emoticons = emoString.split("\\s+");
-				
-				
+								
 				for (String emo : emoticons) {
 					//System.out.println(emo);
 					emoticonPattern.append(Pattern.quote(emo));
 					emoticonPattern.append('|');
 					map.put(emo, processedText);
-				}
-			
+				}			
 			}
 			
 			emoticonPattern.replace(emoticonPattern.length() - 1, emoticonPattern.length(), ")");
 			patternEmo = Pattern.compile(emoticonPattern.toString());
-			printMap(map);
+			//printMap(map);
 			
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
