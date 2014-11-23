@@ -31,7 +31,7 @@ public class StanfordCoreNlpDemo {
   int countSmiley = 0;
   int countTotal = 0;
   
-  public static void main(String[] args) throws IOException {	  
+  public static void main(String[] args) throws IOException {
 	  
 	  //emoticon-parser
 	  EmoticonJsonParser.readJson();
@@ -40,10 +40,7 @@ public class StanfordCoreNlpDemo {
 	  SlangParser.readSlangFile();
 	  
 	  StanfordCoreNlpDemo obj = new StanfordCoreNlpDemo();
-
-	  String input = args[0];
-	  String output = args[1];
-	  obj.readCSV(input, output);
+	  obj.readCSV(args[0], args[1]);
 }
   
   //Get Sentiment from Stanford Core NLP
@@ -51,23 +48,22 @@ public class StanfordCoreNlpDemo {
   {
 	  String sentiment = null;
 	  try{
-			  StanfordCoreNLP pipeline = new StanfordCoreNLP(props);
-			  
-			  Annotation annotation = new Annotation(text);
-			  pipeline.annotate(annotation);
-			  
-			  List<CoreMap> sentences = annotation.get(SentencesAnnotation.class);	  
-			  
-			  for (CoreMap sentence : sentences) {
-			    sentiment = sentence.get(SentimentCoreAnnotations.ClassName.class);
-			  }
+	  StanfordCoreNLP pipeline = new StanfordCoreNLP(props);
+	  
+	  Annotation annotation = new Annotation(text);
+	  pipeline.annotate(annotation);
+	  
+	  List<CoreMap> sentences = annotation.get(SentencesAnnotation.class);	  
+	  
+	  for (CoreMap sentence : sentences) {
+	    sentiment = sentence.get(SentimentCoreAnnotations.ClassName.class);
 	  }
-	  catch(Exception e)
+	  }
+	  catch (Exception e)
 	  {
-		  System.out.println("Error while Parsing Stanford NLP");
+		  System.out.println("Exception in Stanford NLP");
 		  e.printStackTrace();
 	  }
-	  
 	  return sentiment;
   }
   
@@ -104,43 +100,40 @@ public class StanfordCoreNlpDemo {
           try {
 	          String[] values = reader.readNext();
 	          
-	          while (values != null) {
-	        	  if(values.length > 0)
+	          while (values != null ) {
+	        	  if(values.length > 0){
+	        	  countTotal++;
+	        	  System.out.println(countTotal);
+	        	  
+	        	  ArrayList<String> valuesList = new ArrayList<String>(Arrays.asList(values));
+	        	  
+	        	  //Preprocess the data;
+	        	  String replacedString = dataPreProcessing(values[1], extractor);
+	        	  replacedString = replacedString.trim();
+	        	  
+	        	 if(replacedString.length() > 0 && replacedString != null)
 	        	  {
-		        	  countTotal++;
-		        	  System.out.println(countTotal);
-		        	  
-		        	  ArrayList<String> valuesList = new ArrayList<String>(Arrays.asList(values));
-		        	  
-		        	  //Preprocess the data;
-		        	  String replacedString = dataPreProcessing(values[1], extractor);
-		        	  replacedString = replacedString.trim();
-		        	  
-		        	  if(replacedString != null && replacedString.length() > 0)
-		        	  {
-		            	 try{
+	        		 try{
 		        		  System.out.println(replacedString);
-		        		  String sentiment = getSentiment(replacedString);
-		            	  
-		        		  if(sentiment != null)
-		        		  {
-			        		  valuesList.add(sentiment);
-			            	  
-			            	  String[] sentimentArray = new String[ valuesList.size() ];
-			            	  sentimentArray = valuesList.toArray(sentimentArray);
-			            	  
-			            	  writer.writeNext(sentiment);
-		        		  }
-		            	 }catch(Exception e){
-		            		 System.out.println("Error:" + replacedString);
-		            		 e.printStackTrace();
-		            	 }
+		            	  String sentiment = getSentiment(replacedString);
+		            	  if(sentiment != null)
+		            	  {
+			            	  valuesList.add(sentiment);
+			            	  valuesList.add(checkSentiment(sentiment));
+		                	  
+		                	  String[] sentimentArray = new String[ valuesList.size() ];
+		                	  sentimentArray = valuesList.toArray(sentimentArray);                	  
+		                	  writer.writeNext(sentimentArray);
+		            	  }
+		        	  }catch(Exception e){
+		        		  System.out.println("Error:" + replacedString);
+		        		  e.printStackTrace();
 		        	  }
-		          	} 
-	        	  	values = reader.readNext();
-	          	}
-	          }finally {
-
+	        	  	}
+	        	  }
+	        	 values = reader.readNext();
+	          }
+          } finally {
 			  // we have to close reader manually
 			  reader.close();
 			  writer.close();
@@ -155,8 +148,7 @@ public class StanfordCoreNlpDemo {
 	  System.out.println("Total Tweets: " + countTotal);
 	  System.out.println("Done");
   }
-  
-  
+    
   public String dataPreProcessing(String input, Extractor extractor)
   {
 	  String replacedString = new String(input);
